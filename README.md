@@ -25,7 +25,8 @@ Note that some variables are in portuguese, as this project was initially create
    cd minimalPyVn
    ```
 
-3. **Install dependencies:**
+2. **Install dependencies:**
+   
     - Requires Python 3.8+
     - Install Pygame and PyYAML:
    
@@ -33,7 +34,7 @@ Note that some variables are in portuguese, as this project was initially create
    pip install pygame pyyaml
    ```
 
-4. **Check your Python version:**
+3. **Check your Python version:**
    
    ```sh
    python --version
