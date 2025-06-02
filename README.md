@@ -59,7 +59,7 @@ Customize colors and fonts in `renderer.py` by editing the RGB tuples and font s
 Chapters are define in `.yml` files inside the `chapters` folder. Each file should have a `title`and `sections`. Each section is a list of lines, which can be:
 
 - **Narrative**:
-Plain text for narration (no special markerks).
+Plain text for narration (no special markers).
 - **Location (or subtitle)**:
 Start and end with `€`, e.g. `€Location - Time€`
 - **Dialog**:
