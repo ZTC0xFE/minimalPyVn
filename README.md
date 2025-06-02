@@ -19,19 +19,22 @@ Note that some variables are in portuguese, as this project was initially create
 ## Installation & Version Check
 
 1. **Clone the repository:**
+   
    ```sh
-   git clone https://github.com/youruser/minimalPyVn.git
+   git clone https://github.com/ZTC0xFE/minimalPyVn.git
    cd minimalPyVn
    ```
 
-2. **Install dependencies:**
+3. **Install dependencies:**
     - Requires Python 3.8+
     - Install Pygame and PyYAML:
+   
    ```sh
    pip install pygame pyyaml
    ```
 
-3. **Check your Python version:**
+4. **Check your Python version:**
+   
    ```sh
    python --version
    ```
