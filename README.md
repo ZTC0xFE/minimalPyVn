@@ -20,19 +20,23 @@ Note that some variables are in portuguese, as this project was initially create
 ## Installation & Version Check
 
 1. **Clone the repository:**
+   
    ```sh
-   git clone https://github.com/youruser/minimalPyVn.git
+   git clone https://github.com/ZTC0xFE/minimalPyVn.git
    cd minimalPyVn
    ```
 
 2. **Install dependencies:**
+   
     - Requires Python 3.8+
     - Install Pygame and PyYAML:
+   
    ```sh
    pip install pygame pyyaml
    ```
 
 3. **Check your Python version:**
+   
    ```sh
    python --version
    ```
@@ -56,7 +60,7 @@ Customize colors and fonts in `renderer.py` by editing the RGB tuples and font s
 Chapters are define in `.yml` files inside the `chapters` folder. Each file should have a `title`and `sections`. Each section is a list of lines, which can be:
 
 - **Narrative**:
-Plain text for narration (no special markerks).
+Plain text for narration (no special markers).
 - **Location (or subtitle)**:
 Start and end with `€`, e.g. `€Location - Time€`
 - **Dialog**:
