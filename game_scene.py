@@ -1,103 +1,111 @@
+import os
 import pygame
 from parser import ContentParser
 from renderer import TextRenderer
-from settings import SCREEN_WIDTH, SCREEN_HEIGHT
+
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, CHAPTERS_DIR
+from save_manager import load_progress, save_progress
 
 class GameScene:
     """
-    Displays section by section, calling render_blocks_typewriter to type out all content.
-    Always shows the arrows “← Back” and “Next →” in the footer.
-    If on the last section, “→” returns to the Menu.
-    The chapter title appears in all sections, but is NOT redrawn in the navigation bar.
+    Shows each chapter section as a full “page”.
+    - ←/→/ENTER/ESC for navigation.
+    - ESC returns to menu anytime.
+    - Progress is saved in progress.pkl.
     """
 
-    def __init__(self, screen, chapter_path):
-        self.screen = screen
-        self.clock = pygame.time.Clock()
-        self.chapter_path = chapter_path
+    def __init__(self, screen, chapter_filename):
+        self.screen           = screen
+        self.chapter_filename = chapter_filename
+        self.full_path        = os.path.join(CHAPTERS_DIR, chapter_filename)
 
-        cp = ContentParser(chapter_path).load()
-        self.title = cp.title
-        self.section_ids = list(cp.sections.keys())
-        self.sections = cp.sections
+        # Parse chapter: get title and sections
+        parser = ContentParser(self.full_path)
+        self.title       = parser.title
+        self.sections    = parser.sections    # dict: { section_id: Section(...) }
+        self.section_ids = parser.section_ids # ordered list
+
+        self.total_pages = len(self.section_ids)
+        self.current_i   = 0  # index 0..total_pages-1
 
         self.renderer = TextRenderer(screen)
-        self.current_index = 0
 
-        self.font = pygame.font.SysFont("consolas", 22)
+        # Load progress
+        self.progress = load_progress()
+        if chapter_filename not in self.progress:
+            self.progress[chapter_filename] = {"last_page": 0, "completed": False}
+
+        # Restart if already completed
+        if self.progress[chapter_filename].get("completed", False):
+            self.current_i = 0
+            self.progress[chapter_filename]["last_page"] = 0
+            self.progress[chapter_filename]["completed"] = False
+            save_progress(self.progress)
+        else:
+            last = self.progress[chapter_filename].get("last_page", 0)
+            if 0 <= last < self.total_pages:
+                self.current_i = last
+            else:
+                self.current_i = 0
 
     def run(self):
-        """
-        Main loop:
-          1) Types out the entire current section (render_blocks_typewriter).
-          2) Displays the fixed navigation bar in the footer.
-          3) Waits for arrow key or ENTER:
-             - LEFT: goes back (or, if it's the first section, returns to the menu).
-             - RIGHT: goes to the next (or, if it's the last, returns to the menu).
-             - ENTER: repeats the current section.
-        """
+        clock = pygame.time.Clock()
+
         while True:
-            sec_id = self.section_ids[self.current_index]
-            blocos = self.sections[sec_id]
+            # Render current section as a full page
+            sec_id = self.section_ids[self.current_i]
+            section = self.sections[sec_id]
+            blocks  = section.blocks
 
-            # 1) Types out all content of the current section, passing the title
-            self.renderer.render_blocks_typewriter(blocos, self.title)
+            self.renderer.render_section(
+                blocks,
+                self.title,
+                current_page = self.current_i + 1,
+                total_pages  = self.total_pages
+            )
 
-            # 2) Displays the navigation bar and waits for input
-            escolha = self._navigation_loop()
-            if escolha == "voltar":
-                if self.current_index == 0:
-                    from menu_scene import MenuScene
-                    return MenuScene(self.screen)
+            # Clear pending events
+            pygame.event.clear()
+            pygame.event.pump()
+
+            # Wait for ←/→/ENTER/ESC
+            choice = self._navigation_loop()
+
+            if choice == "voltar":
+                if self.current_i == 0:
+                    # First section + ← returns to menu
+                    self._save_and_return_menu()
+                    return
                 else:
-                    self.current_index -= 1
+                    self.current_i -= 1
 
-            elif escolha == "proximo":
-                # If it's the last section, return to the menu
-                if self.current_index == len(self.section_ids) - 1:
-                    from menu_scene import MenuScene
-                    return MenuScene(self.screen)
+            elif choice == "proximo":
+                if self.current_i == self.total_pages - 1:
+                    # Last section + → returns to menu
+                    self._save_and_return_menu()
+                    return
                 else:
-                    self.current_index += 1
-            # If escolha == "mesma", repeat the same section
+                    self.current_i += 1
+
+            elif choice == "mesma":
+                # Redraw same section
+                pass
+
+            elif choice == "menu":
+                # ESC pressed → return to menu
+                self._save_and_return_menu()
+                return
+
+            # Update progress
+            self._update_progress()
+            clock.tick(60)
 
     def _navigation_loop(self):
         """
-        Draws in the footer: “← Back    (ENTER repeats)    Next →”
-        The screen already contains all section content (including title). Only the
-        bottom area is overlaid to highlight the instructions, without redrawing the title.
-        Waits for LEFT / RIGHT / ENTER:
-          - LEFT: "voltar"
-          - RIGHT: "proximo"
-          - ENTER: "mesma" (repeats)
+        Waits for ←, →, ENTER or ESC.
+        Returns "voltar", "proximo", "mesma" or "menu".
         """
         while True:
-            # Overlay semi-transparent footer
-            footer_h = 50
-            footer_y = SCREEN_HEIGHT - footer_h
-            s = pygame.Surface((SCREEN_WIDTH, footer_h))
-            s.set_alpha(200)
-            s.fill((0, 0, 0))
-            self.screen.blit(s, (0, footer_y))
-
-            # Builds the navigation string
-            prompt = ""
-            if self.current_index > 0:
-                prompt += "← Back   "
-            else:
-                prompt += "           "
-            prompt += "(ENTER repeats)   "
-            if self.current_index < len(self.section_ids) - 1:
-                prompt += "   Next →"
-            else:
-                prompt += "   (End) →"
-
-            surf = self.font.render(prompt, True, (200, 200, 200))
-            rect = surf.get_rect(center=(SCREEN_WIDTH // 2, footer_y + footer_h // 2))
-            self.screen.blit(surf, rect)
-
-            pygame.display.flip()
-
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
                     pygame.quit()
@@ -109,5 +117,22 @@ class GameScene:
                         return "proximo"
                     elif ev.key == pygame.K_RETURN:
                         return "mesma"
-
+                    elif ev.key == pygame.K_ESCAPE:
+                        return "menu"
             pygame.time.delay(10)
+
+    def _update_progress(self):
+        """
+        Save last_page and completed in progress.pkl.
+        """
+        cap = self.chapter_filename
+        self.progress[cap]["last_page"] = self.current_i
+        self.progress[cap]["completed"] = (self.current_i == self.total_pages - 1)
+        save_progress(self.progress)
+
+    def _save_and_return_menu(self):
+        """
+        Save progress and return to menu.
+        """
+        save_progress(self.progress)
+        # main.py will call MenuScene on return

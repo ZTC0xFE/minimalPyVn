@@ -1,4 +1,4 @@
-title: "Example Chapter"
+title: "Chapter 1: Example"
 
 sections:
   ch1:
@@ -9,3 +9,10 @@ sections:
     - "Then, he picked up his phone, checked the time and sent a message to Hazel"
     - "# [Zion] Guess this will one of those days, huh.#"
     - "And... he got a reply from Hazel."
+  ch2:
+    - "€Hazel's Apartment - Morning€"
+    - "Hazel is already awake, sipping her coffee and reading the news."
+    - "She smiles as she sees Zion's message."
+    - "¥ [Hazel] You know it, Zion! Ready for another adventure?¥"
+    - "Zion replies with a thumbs-up emoji."
+    - "They both know today will be a day to remember."

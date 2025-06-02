@@ -12,6 +12,7 @@ Note that some variables are in portuguese, as this project was initially create
 - **Dialog & Thought Boxes:** Dialogs appear in bordered boxes with character names; thoughts are shown in italicized boxes.
 - **Location Highlighting:** Location/time information is rendered in yellow for emphasis.
 - **Section Navigation:** Navigate between sections with arrow keys; repeat sections or return to the menu.
+- **Progress Saving:** The progress is saved automatically each section entered, and will be resumed when enter into an chapter again.
 - **YAML-Driven Content:** Chapters and sections are defined in simple YAML files for easy editing and expansion.
 
 ---
