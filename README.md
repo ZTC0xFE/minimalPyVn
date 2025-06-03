@@ -1,5 +1,13 @@
 # MinimalPyVN
 
+---
+
+⚠️ **Quick note**
+
+This project was made using many parts that was AI-generated and assisted. The first intention was something personal and for fun.
+
+---
+
 A minimalist visual novel engine written in Python using Pygame. This project lets you create simple visual novels with typewriter effects, dialog and thought boxes, location markers, and more, all defined in easy-to-edit YAML files.
 
 Note that some variables are in portuguese, as this project was initially created for a personal project in. Feel free to change them to your preferred language.
