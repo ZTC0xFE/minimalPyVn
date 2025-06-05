@@ -1,18 +1,39 @@
-title: "Chapter 1: Example"
+#Updated version of the example chapter with inline and dynamic text features
 
+#Optional settings for the chapter, if not specified, defaults will be used
+settings:
+  text_speed: 0.05
+  skip_enabled: true
+  dialogue_color: "#404040"
+  thinking_color: "#323263"
+  font_size: 22
+  text_color: "#EFEFEF"
+  subtitle_color: "#C8C832"
+
+title: "Advanced Example: Inline & Dynamic"
 sections:
-  ch1:
-    - "€Zion's Apartment - Morning€"
-    - "Zion wakes up to a new day, the sun rising over the horizon."
-    - "He stretches and prepares for the challenges ahead."
-    - "¥ [Zion] Ugh... I hate waking up early...¥"
-    - "Then, he picked up his phone, checked the time and sent a message to Hazel"
-    - "# [Zion] Guess this will one of those days, huh.#"
-    - "And... he got a reply from Hazel."
-  ch2:
-    - "€Hazel's Apartment - Morning€"
-    - "Hazel is already awake, sipping her coffee and reading the news."
-    - "She smiles as she sees Zion's message."
-    - "¥ [Hazel] You know it, Zion! Ready for another adventure?¥"
-    - "Zion replies with a thumbs-up emoji."
-    - "They both know today will be a day to remember."
+  parte1:
+    - "Narrative: Welcome to this advanced example."
+    - "€Test Hall - Afternoon€"
+    - "# [Zion] Ready for the tests? #"
+    # Dialogue box override: background #303030, font size 18
+    - "[dialogue_color=#303030;font_size=18]# [Hazel] Yes, I'm ready!#[/]"
+    # Inline color override: only the word "Attention" in red
+    - "Narrative: [color=#FF0000]Attention[/], this word is in red!"
+    # Normal thought
+    - "¥ [Zion] I'll check if everything fits.¥"
+
+  parte2:
+    # Text speed override: 0.1
+    - "[text_speed=0.1]Narrative: This part is slow for testing.[/]"
+    - "# [Hazel] Keeping the default here.#"
+    # Inline color in dialogue: the word "special" in green
+    - "# [Zion] This is a [color=#00FF00]special dialogue[/] inside a box.#"
+    # Thought with inline color override
+    - "¥ [Hazel] This is a [color=#FF00FF]colored thought[/].¥"
+    - "Now also a word with [color=#0000FF]different color[/] in the middle of the text."
+
+  parte3:
+    - "Narrative: End of test. Thank you!"
+    - "# [Zion] See you next time!#"
+    - "¥ [Hazel] Bye!¥"

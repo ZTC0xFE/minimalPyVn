@@ -8,9 +8,9 @@ from save_manager import load_progress, save_progress
 
 class GameScene:
     """
-    Shows each chapter section as a full “page”.
+    Displays each chapter section as a full page.
     - ←/→/ENTER/ESC for navigation.
-    - ESC returns to menu anytime.
+    - ESC returns to menu at any time.
     - Progress is saved in progress.pkl.
     """
 
@@ -22,15 +22,15 @@ class GameScene:
         # Parse chapter: get title and sections
         parser = ContentParser(self.full_path)
         self.title       = parser.title
-        self.sections    = parser.sections    # dict: { section_id: Section(...) }
+        self.sections    = parser.sections    # { section_id: Section(...) }
         self.section_ids = parser.section_ids # ordered list
 
         self.total_pages = len(self.section_ids)
-        self.current_i   = 0  # index 0..total_pages-1
+        self.current_i   = 0  # current page index
 
-        self.renderer = TextRenderer(screen)
+        self.renderer = TextRenderer(screen, parser.settings)
 
-        # Load progress
+        # Load or initialize progress
         self.progress = load_progress()
         if chapter_filename not in self.progress:
             self.progress[chapter_filename] = {"last_page": 0, "completed": False}
@@ -52,7 +52,7 @@ class GameScene:
         clock = pygame.time.Clock()
 
         while True:
-            # Render current section as a full page
+            # Render current section as a page
             sec_id = self.section_ids[self.current_i]
             section = self.sections[sec_id]
             blocks  = section.blocks
@@ -64,16 +64,15 @@ class GameScene:
                 total_pages  = self.total_pages
             )
 
-            # Clear pending events
             pygame.event.clear()
             pygame.event.pump()
 
-            # Wait for ←/→/ENTER/ESC
+            # Wait for navigation input
             choice = self._navigation_loop()
 
             if choice == "voltar":
                 if self.current_i == 0:
-                    # First section + ← returns to menu
+                    # At first section, ← returns to menu
                     self._save_and_return_menu()
                     return
                 else:
@@ -81,29 +80,29 @@ class GameScene:
 
             elif choice == "proximo":
                 if self.current_i == self.total_pages - 1:
-                    # Last section + → returns to menu
+                    # At last section, → returns to menu
                     self._save_and_return_menu()
                     return
                 else:
                     self.current_i += 1
 
             elif choice == "mesma":
-                # Redraw same section
+                # Redraw current section
                 pass
 
             elif choice == "menu":
-                # ESC pressed → return to menu
+                # ESC pressed: return to menu
                 self._save_and_return_menu()
                 return
 
-            # Update progress
+            # Save progress
             self._update_progress()
             clock.tick(60)
 
     def _navigation_loop(self):
         """
         Waits for ←, →, ENTER or ESC.
-        Returns "voltar", "proximo", "mesma" or "menu".
+        Returns: "voltar", "proximo", "mesma", or "menu".
         """
         while True:
             for ev in pygame.event.get():
@@ -123,7 +122,7 @@ class GameScene:
 
     def _update_progress(self):
         """
-        Save last_page and completed in progress.pkl.
+        Updates last_page and completed status in progress.pkl.
         """
         cap = self.chapter_filename
         self.progress[cap]["last_page"] = self.current_i
@@ -132,7 +131,7 @@ class GameScene:
 
     def _save_and_return_menu(self):
         """
-        Save progress and return to menu.
+        Saves progress and returns to menu.
         """
         save_progress(self.progress)
-        # main.py will call MenuScene on return
+        # main.py will call MenuScene after return

@@ -1,42 +1,43 @@
 # MinimalPyVN
 
-A minimalist visual novel engine written in Python using Pygame. This project lets you create simple visual novels with typewriter effects, dialog and thought boxes, location markers, and more, all defined in easy-to-edit YAML files.
+A minimalist visual novel engine written in Python using Pygame. This project lets you create simple visual novels with typewriter effects, dialog and thought boxes, location markers, and more—all defined in easy-to-edit YAML files.
 
-Note that some variables are in portuguese, as this project was initially created for a personal project in. Feel free to change them to your preferred language.
+> **Note:** Some variable names are in Portuguese, as this project was originally developed for a personal project. Feel free to rename them to your preferred language. Also, this was created with AI assistance, so it may not follow all best practices. However, it is functional and serves as a good starting point for simple visual novels, plus, it was just for fun. Don't take it as a professional project!
 
 ---
 
 ## Features Overview
 
-- **Typewriter Text Rendering:** Narrative, dialog, location, and thought blocks are displayed with a typewriter effect.
-- **Dialog & Thought Boxes:** Dialogs appear in bordered boxes with character names; thoughts are shown in italicized boxes.
-- **Location Highlighting:** Location/time information is rendered in yellow for emphasis.
-- **Section Navigation:** Navigate between sections with arrow keys; repeat sections or return to the menu.
-- **Progress Saving:** The progress is saved automatically each section entered, and will be resumed when enter into an chapter again.
+- **Typewriter Text Rendering:** Narrative, dialog, location, and thought blocks appear with a typewriter effect.
+- **Dialog & Thought Boxes:** Dialogs show in bordered boxes with character names; thoughts are displayed in italicized boxes.
+- **Location Highlighting:** Location/time lines render in a distinct subtitle color for emphasis.
+- **Section Navigation:** Use arrow keys (←/→) to move between sections; press ENTER to repeat a section or ESC to return to the menu.
+- **Progress Saving:** Your progress is saved automatically per section, so you can resume where you left off when reopening a chapter.
 - **YAML-Driven Content:** Chapters and sections are defined in simple YAML files for easy editing and expansion.
+- **Advanced Styling (v1.1.1):**  
+  - Global settings in `settings:` (text speed, font size, colors).  
+  - Inline color overrides with `[color=#RRGGBB]…[/]`.  
+  - Fixed-height dialog/thought boxes to prevent layout breakage.  
+  - Hex-only color support in `settings:` and overrides.
 
 ---
 
 ## Installation & Version Check
 
 1. **Clone the repository:**
-   
    ```sh
    git clone https://github.com/ZTC0xFE/minimalPyVn.git
    cd minimalPyVn
    ```
 
 2. **Install dependencies:**
-   
-    - Requires Python 3.8+
-    - Install Pygame and PyYAML:
-   
-   ```sh
-   pip install pygame pyyaml
-   ```
+   - Requires **Python 3.8+**  
+   - Install Pygame and PyYAML:
+     ```sh
+     pip install pygame pyyaml
+     ```
 
-3. **Check your Python version:**
-   
+3. **Verify your Python version:**
    ```sh
    python --version
    ```
@@ -44,70 +45,86 @@ Note that some variables are in portuguese, as this project was initially create
 ---
 
 ## Customization Options
-- **Window Title**:
-Change the `pygame.display.set_caption` definition in `main.py` to set your visual novel's title.
-- **Screen Size**:
-Change the `SCREEN_WIDTH` and `SCREEN_HEIGHT` in `settings.py` to adjust the window size.
-- **Text Speed**:
-Modify the `TEXT_SPEED` variable in `settings.py` to control the typewriter effect speed.
-- **Colors & Fonts**:
-Customize colors and fonts in `renderer.py` by editing the RGB tuples and font settings in the TextRenderer class.
 
---- 
+- **Window Title:**  
+  Change the `pygame.display.set_caption` line in `main.py` to set your VN’s window title.
+- **Screen Size:**  
+  Adjust `SCREEN_WIDTH` and `SCREEN_HEIGHT` in `settings.py` to change the window dimensions.
+- **Text Speed:**  
+  Modify `TEXT_SPEED` in `settings.py` (or via chapter-specific `settings:`) to control the typewriter pace.
+- **Colors & Fonts:**  
+  Customize colors and fonts within `renderer.py`’s `TextRenderer` class or via the new YAML `settings:` block.
+
+---
 
 ## YAML Format & Example
 
-Chapters are define in `.yml` files inside the `chapters` folder. Each file should have a `title`and `sections`. Each section is a list of lines, which can be:
+Chapters live in `.yml` files under the `chapters/` folder. Each file must include a `title:` and `sections:`. Under `sections:`, each section is a list of lines, which can be:
 
-- **Narrative**:
-Plain text for narration (no special markers).
-- **Location (or subtitle)**:
-Start and end with `€`, e.g. `€Location - Time€`
-- **Dialog**:
-Start and end with `#`, with character in brackets, e.g. `# [Name] Dialog text.#`
-- **Thought**:
-Start and end with `¥`, with character in brackets, e.g. `¥ [Name] Thought text.¥`
+- **Narrative:**  
+  Plain text for narration (no special markers).
+- **Location (or subtitle):**  
+  Wrap with `€…€`, e.g. `€Location – Time€`.
+- **Dialog:**  
+  Wrap with `#…#`, including a speaker in brackets, e.g. `# [Name] Dialogue text.#`.
+- **Thought:**  
+  Wrap with `¥…¥`, including a speaker in brackets, e.g. `¥ [Name] Thought text.¥`.
 
-**Example:**
+### Example Chapter
 
 ```yaml
 title: "Chapter 1: The Beginning"
 sections:
-    intro:
-        - "This is the beginning of our story."
-        - "€Location - Morning€"
-        - "# [Alice] Hello, world!#"
-        - "¥ [Alice] I wonder what adventures await me.¥"
-        - "Another narrative line."
+  intro:
+    - "This is the beginning of our story."
+    - "€Location – Morning€"
+    - "# [Alice] Hello, world!#"
+    - "¥ [Alice] I wonder what adventures await me.¥"
+    - "Another narrative line."
 ```
+
+---
+
+## How to use the YML
+
+For a comprehensive guide to the new `settings:` block and inline color overrides (v1.1.1), please see:
+
+[See the tutorial here! ](YML_Tutorial.md)
+
+This tutorial covers:
+
+1. Overall Structure  
+2. `settings:` Block (Globals)  
+3. Section & Block Syntax  
+4. Inline Color Overrides  
+5. Detailed Example YAML  
+
 ---
 
 ## Running & Building
 
-- **Run directly:**
-Open `main.py` in your IDE of preference (e.g VSCode, PyCharm) and run it. The main menu will appear.
-- **Run from command line:**
+- **Run directly (IDE):**  
+  Open `main.py` in your favorite IDE (e.g., VS Code, PyCharm) and run it. The main menu will appear.
+
+- **Run from the command line:**
   ```sh
   python main.py
   ```
-- **Build an executable:** 
-Use PyInstaller to create a standalone executable:
-    ```sh
-    pip install pyinstaller
-    pyinstaller --onefile --add-data "chapters;chapters" main.py
-    ```
-- On Windows, the executable will be in the `dist` folder.
-- For Mac/Linux, adjust the `--add-data` syntax as needed.
+
+- **Build a standalone executable:**  
+  Install PyInstaller, then package all chapters and code:
+  ```sh
+  pip install pyinstaller
+  pyinstaller --onefile --add-data "chapters;chapters" main.py
+  ```
+  - On Windows, the executable appears in the `dist/` folder.  
+  - On macOS/Linux, adjust the `--add-data` syntax if needed.
 
 ---
 
 ## Feedback & Support
 
-Suggestions, improvements, and pull requests are welcome!
-If you like this project, please consider starring ⭐ it on GitHub or leaving your feedback.
+Suggestions, improvements, and pull requests are always welcome! If you find this project helpful, please consider starring ⭐ it on GitHub or opening an issue with your feedback.
 
-Psst! Inside the `chapters` folder, you'll find a sample chapter to get you started. Feel free to modify it or create your own!
-
-
-
+> **Tip:** Inside the `chapters/` folder, you'll find a sample `.yml` chapter. Feel free to modify or replace it as a starting point.
 
