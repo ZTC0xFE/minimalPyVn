@@ -1,3 +1,4 @@
+# main.py
 import pygame
 from menu_scene import MenuScene
 from game_scene import GameScene
@@ -5,7 +6,10 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode(
+        (SCREEN_WIDTH, SCREEN_HEIGHT),
+        pygame.RESIZABLE
+    )
     pygame.display.set_caption("Title goes here uwu")
 
     while True:

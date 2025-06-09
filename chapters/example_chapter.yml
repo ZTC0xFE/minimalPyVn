@@ -13,7 +13,7 @@ settings:
 title: "Advanced Example: Inline & Dynamic"
 sections:
   parte1:
-    - "Narrative: Welcome to this advanced example."
+    - "Welcome to this advanced example."
     - "€Test Hall - Afternoon€"
     - "# [Zion] Ready for the tests? #"
     # Dialogue box override: background #303030, font size 18
@@ -32,6 +32,7 @@ sections:
     # Thought with inline color override
     - "¥ [Hazel] This is a [color=#FF00FF]colored thought[/].¥"
     - "Now also a word with [color=#0000FF]different color[/] in the middle of the text."
+    - "# [Hazel] This is a long dialogue box. Just for a text if the dialogue box now can handle more than 2 lines of text inside of it without breaking it entirely. #"
 
   parte3:
     - "Narrative: End of test. Thank you!"
