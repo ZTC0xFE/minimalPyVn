@@ -93,6 +93,8 @@ Within each section, list lines one by one. Each line falls into one of these ca
      ```  
    - Description: Plain text appearing in white (or your `text_color` override). It’s displayed with a typewriter effect.
 
+     > `Narrative` tag at the start isn't needed, altough, it just get overriden when place at the start anyway.
+
 2. **Location / Subtitle**  
    - Syntax:  
      ```
